@@ -62,10 +62,6 @@
 				background-color: #455A64;
 				outline: none;
 			}
-			svg {
-				display: block;
-				margin: auto;
-			}
 			.nav {
 				background-color: #263238;
 				white-space: nowrap;
@@ -81,8 +77,9 @@
 				color: #03A9F4;
 				margin-right: 10px;
 			}
-			.answerValue {
-				font-size: 30px;
+			.chart {
+				width: 750px;
+				height: 300px;
 			}
 			.bottom {
 				position: fixed;
@@ -117,7 +114,7 @@
 			}
 			if(days != 0) {
 				document.getElementById('content').innerHTML = days + ' days selected<br><br>'
-					+ '<div class="ct-chart ct-perfect-fourth"></div>'; // API + Chartist.js
+					+ '<div class="chart ct-chart ct-perfect-fourth"></div>'; // API + Chartist.js
 				var data = {
 					labels: [],
 					series: [[]]
