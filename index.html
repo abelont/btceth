@@ -112,7 +112,30 @@
 				days = 365;
 			}
 			if(days != 0) {
-				document.getElementById('content').innerHTML = days + ' days selected'; // API + Chartist.js
+				document.getElementById('content').innerHTML = days + ' days selected<br><br>'
+					+ '<div class="ct-chart ct-perfect-fourth"></div>'; // API + Chartist.js
+				var data = {
+					labels: [],
+					series: [[]]
+				};
+				var url = "https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=USD&limit=7";
+				$.getJSON(url, function (dataAPI) {
+					$.each(dataAPI.Data, function (key, val) {
+						console.log(val.close);
+						data.series[0].push(val.close);
+						var date = new Date(val.time * 1000);
+						data.labels.push((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
+			   		});
+					var options = {
+						width: 750,
+						height: 300,
+						showPoint: false,
+						axisX: {
+							showGrid: false
+						}
+					};
+					new Chartist.Line('.ct-chart', data, options);
+				});
 			} else {
 				document.getElementById('content').innerHTML = 'Welcome.<br>Select the amount of time of the chart above.';
 			}
