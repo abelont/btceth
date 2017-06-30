@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My first Chartist Tests</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+	<meta charset="utf-8"/>
+  </head>
+  <body>
+    <div class="ct-chart ct-perfect-fourth"></div>
+
+    <script type="text/javascript">
+
+		var data = {
+			// A labels array that can contain any sort of values
+			labels: [],
+
+
+
+		  // Our series array that contains series objects or in this case series data arrays
+			series: [
+				[]
+			]
+		};
+
+		var url = "https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=USD&limit=7";
+		$.getJSON(url, function (dataAPI) {
+			//data.series[0] = data.series[0].concat(dataAPI.Data);
+
+		    $.each(dataAPI.Data, function (key, val) {
+		    	console.log(val.close);
+		    	data.series[0].push(val.close);
+
+		    	var date = new Date(val.time * 1000);
+		    	data.labels.push((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
+		    	//data.labels.push(val.time);
+
+		    });
+
+			var options = {
+				width: 750,
+				height: 300,
+
+				showPoint: false,
+
+				axisX: {
+	    			// We can disable the grid for this axis
+	    			showGrid: false
+  				}
+
+			};
+
+			new Chartist.Line('.ct-chart', data, options);
+
+
+		});
+
+		console.log(data);
+
+		// Create a new line chart object where as first parameter we pass in a selector
+		// that is resolving to our chart container element. The Second parameter
+		// is the actual data object.
+
+
+
+
+    </script>
+  </body>
+</html> 
