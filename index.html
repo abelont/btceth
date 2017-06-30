@@ -6,10 +6,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+		<!--<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>-->
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-		<link href='./favicon.ico' rel='icon' type='image/x-icon'>
-		<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+		<!--<link href='./favicon.ico' rel='icon' type='image/x-icon'>
+		<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">-->
 		<style>
 			::selection {
 				background: #263238;
@@ -69,9 +69,12 @@
 				box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.26);
 				margin-bottom: 5vh;
 			}
-			#title {
-				color: #CCC;
+			#titleBtc {
 				margin-left: 20px;
+				color: #FF6F00;
+			}
+			#titleEth {
+				color: #03A9F4;
 				margin-right: 10px;
 			}
 			.answerValue {
@@ -87,16 +90,32 @@
 	</head>
 	<body>
 		<div class="nav">
-			<span id="title">BTCETH</span><a href="./" class="item">Home</a><a href="./?address" class="item">Address info</a><!--
-			--><a href="./?convert" class="item">Conversion</a><a href="./?rates" class="item">Rates</a>
+			<span id="titleBtc">BTC</span><span id="titleEth">ETH</span><a href="./" class="item">Home</a><a href="./?day" class="item">Day</a><!--
+			--><a href="./?week" class="item">Week</a><a href="./?month" class="item">Month</a><!--
+			--><a href="./?year" class="item">Year</a>
 		</div>
 		<center>
 			<div id='content'>
 			</div>
 		</center>
-		<div class="bottom">API wrappers hosted by <a href="https://wietzeb.nl">wietzeb.nl</a></div>
+		<div class="bottom">CryptoCompare API: <a href="https://www.cryptocompare.com/api">cryptocompare.com/api</a></div>
 		<script>
-			
+			var param = window.location.search.substr(1);
+			var days = 0;
+			if(param.endsWith('day')) {
+				days = 1;
+			} else if(param.endsWith('week')) {
+				days = 7;
+			} else if(param.endsWith('month')) {
+				days = 30;
+			} else if(param.endsWith('year')) {
+				days = 365;
+			}
+			if(days != 0) {
+				document.getElementById('content').innerHTML = days + ' days selected'; // API + Chartist.js
+			} else {
+				document.getElementById('content').innerHTML = 'Welcome.<br>Select the amount of time of the chart above.';
+			}
 
 			// OLD WANNABIT SCRIPT
 			/*
