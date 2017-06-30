@@ -119,7 +119,7 @@
 					labels: [],
 					series: [[]]
 				};
-				var url = "https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=USD&limit=7";
+				var url = "https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=USD&limit=" + days;
 				$.getJSON(url, function (dataAPI) {
 					$.each(dataAPI.Data, function (key, val) {
 						console.log(val.close);
