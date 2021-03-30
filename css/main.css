@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+::-moz-selection {
+  background: #263238;
+}
+::selection {
+  background: #263238;
+}
+
+::-moz-selection {
+  background: #263238;
+}
+
+body {
+  margin: 0;
+  background-color: #FAFAFA;
+  font-family: "Roboto", sans-serif;
+  color: #000;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+a.item {
+  color: #FFF;
+  padding-left: 10px;
+  padding-right: 10px;
+  line-height: 64px;
+  display: inline-block;
+  -webkit-transition: background-color 0.5s;
+  transition: background-color 0.5s;
+}
+
+a.item:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+input {
+  border: none;
+  border-bottom: 2px solid #949494;
+  background-color: #FFF;
+  -webkit-transition: border-bottom 0.2s;
+  transition: border-bottom 0.2s;
+}
+
+input:focus {
+  border-bottom: 2px solid #263238;
+  outline: none;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+}
+
+button {
+  border: 2px solid #263238;
+  border-radius: 2px;
+  background-color: #263238;
+  -webkit-transition: background-color 0.2s, border 0.2s;
+  transition: background-color 0.2s, border 0.2s;
+}
+
+button:hover {
+  border: 2px solid #253136;
+  background-color: #253136;
+  outline: none;
+}
+
+.nav {
+  background-color: #263238;
+  white-space: nowrap;
+  overflow-x: auto;
+  -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.26);
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.26);
+  margin-bottom: 5vh;
+}
+
+#titleBtc {
+  margin-left: 20px;
+  color: #FF6F00;
+}
+
+#titleEth {
+  color: #03A9F4;
+  margin-right: 10px;
+}
+
+.chart {
+  width: 750px;
+  height: 300px;
+}
+
+.bottom {
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
+  color: #555;
+}
+
+.cc-img {
+  min-height: 30px;
+  min-width: 345px;
+  max-height: 30px;
+  max-width: 345px;
+}
+
+#api-key {
+  margin-left: 50px;
+  min-width: 480px;
+}

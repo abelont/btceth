@@ -5,258 +5,28 @@
 		<meta name="theme-color" content="#263238">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 		<link href='./favicon.ico' rel='icon' type='image/x-icon'>
-		<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-		<style>
-			::selection {
-				background: #263238;
-			}
-			::-moz-selection {
-				background: #263238;
-			}
-			body {	
-				margin: 0;
-				background-color: #FAFAFA;
-				font-family: Roboto;
-				color: #000;
-			}
-			a {
-				color: #000;
-				text-decoration: none;
-			}
-			a.item {
-				color: #FFF;
-				padding-left: 10px;
-				padding-right: 10px;
-				line-height: 64px;
-				display: inline-block;
-				transition: background-color 0.5s;
-			}
-			a.item:hover {
-				background-color: rgba(0, 0, 0, 0.2);
-			}
-			input {
-				border: none;
-				border-bottom: 2px solid #949494;
-				background-color: #FFF;
-				transition: border-bottom 0.2s;
-			}
-			input:focus {
-				border-bottom: 2px solid #263238;
-				outline: none;
-			}
-			input:-webkit-autofill {
-				-webkit-box-shadow: 0 0 0 30px white inset;
-			}
-			button {
-				border: 2px solid #263238;
-				border-radius: 2px;
-				background-color: #263238;
-				transition: background-color 0.2s, border 0.2s;
-			}
-			button:hover {
-				border: 2px solid #455A64;
-				background-color: #455A64;
-				outline: none;
-			}
-			.nav {
-				background-color: #263238;
-				white-space: nowrap;
-				overflow-x: auto;
-				box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.26);
-				margin-bottom: 5vh;
-			}
-			#titleBtc {
-				margin-left: 20px;
-				color: #FF6F00;
-			}
-			#titleEth {
-				color: #03A9F4;
-				margin-right: 10px;
-			}
-			.chart {
-				width: 750px;
-				height: 300px;
-			}
-			.bottom {
-				position: fixed;
-				bottom: 8px;
-				right: 8px;
-				color: #555;
-			}
-		</style>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+		<link rel="stylesheet" href="./css/main.css">
 	</head>
 	<body>
 		<div class="nav">
-			<span id="titleBtc">BTC</span><span id="titleEth">ETH</span><a href="./" class="item">Home</a><a href="./?day" class="item">Day</a><!--
-			--><a href="./?week" class="item">Week</a><a href="./?month" class="item">Month</a><!--
-			--><a href="./?year" class="item">Year</a>
+			<span id="titleBtc">BTC</span><span id="titleEth">ETH</span>
+			<a href="?days=7" class="item append-key">Week</a><a href="?days=31" class="item append-key">Month</a><a href="?days=365" class="item append-key">Year</a>
+			<input type="password" id="api-key" placeholder="API key (Optional - Warning: visible in URL)">
 		</div>
 		<center>
 			<div id='content'>
 			</div>
 		</center>
-		<div class="bottom">Cryptocurrency API from <a href="https://www.cryptocompare.com/api">cryptocompare.com/api</a></div>
-		<script>
-			var param = window.location.search.substr(1);
-			var days = 0;
-			if(param.endsWith('day')) {
-				days = 1;
-			} else if(param.endsWith('week')) {
-				days = 7;
-			} else if(param.endsWith('month')) {
-				days = 30;
-			} else if(param.endsWith('year')) {
-				days = 365;
-			}
-			if(days != 0) {
-				document.getElementById('content').innerHTML = days + ' days selected<br><br>'
-					+ '<div class="chart ct-chart ct-perfect-fourth"></div>'; // API + Chartist.js
-				var data = {
-					labels: [],
-					series: [[]]
-				};
-				var url = "https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=USD&limit=" + days;
-				$.getJSON(url, function (dataAPI) {
-					$.each(dataAPI.Data, function (key, val) {
-						console.log(val.close);
-						data.series[0].push(val.close);
-						var date = new Date(val.time * 1000);
-						data.labels.push((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
-			   		});
-					var options = {
-						width: 750,
-						height: 300,
-						showPoint: false,
-						axisX: {
-							showGrid: false
-						}
-					};
-					new Chartist.Line('.ct-chart', data, options);
-				});
-			} else {
-				document.getElementById('content').innerHTML = 'Welcome.<br>Select the amount of time of the chart above.';
-			}
-
-			// OLD WANNABIT SCRIPT
-			/*
-			var param = window.location.search.substr(1);
-			if(param.indexOf('address=') !== -1) { // Blockchain Bitcoin address
-				document.getElementById('content').innerHTML = "<h1>Address info</h1><br><br>Loading..."
-				address = param.replace('address=', '');
-				var request = new XMLHttpRequest();
-				request.open('GET', 'https://wietzeb.nl/btc/blockchain/?' + address);
-				request.onreadystatechange = function() {
-					var accountInfo = JSON.parse(request.responseText)
-					document.getElementById('content').innerHTML = '<span id="btcAddress"><h1>' + accountInfo.account + '</h1></span><h2>'
-						+ accountInfo.balance + ' BTC (<a href="./?convert=' + accountInfo.balance + '&action=sellBtc">EUR</a>)</h2>Created:<p>'
-						+ accountInfo.first_seen_human_time + '</p>Sent:<p>' + accountInfo.sent + ' BTC (<a href="./?convert=' + accountInfo.sent
-						+ '&action=sellBtc">EUR</a>)</p>Received:<p>' + accountInfo.received + ' BTC (<a href="./?convert=' + accountInfo.received + '&action=sellBtc">EUR</a>)</p>';
-					document.getElementById('btcAddress').onclick = function() {
-							document.getElementById('btcAddress').innerHTML = '<form action="/." method="GET">'
-								+ '<input type="text" name="address" size="36" autofocus></input> <button type="submit">Check</button></form>';	
-					};
-				}
-				request.onerror = function() {
-					document.getElementById('content').innerHTML = 'An error occurred';
-				}
-				request.send();
-			} else if(param.indexOf('convert=') !== -1) { // Bitonic Bitcoin converter
-				value = param.substr(param.indexOf('=') + 1, param.indexOf('&'));
-				document.getElementById('content').innerHTML = '<h1>Conversion</h1><br><br>Loading...';
-				var request = new XMLHttpRequest();
-				if(param.indexOf('buyBtc') !== -1) {
-					request.open('GET', 'https://wietzeb.nl/btc/bitonic/?prices&buy=' + value);
-					request.onreadystatechange = function() {
-						var valueInfo = JSON.parse(request.responseText)
-						document.getElementById('content').innerHTML = '<h1>Conversion</h1><h2 id="eurValue">' + valueInfo.buy.euro
-							+ ' EUR</h2><p id="btcValue">' + valueInfo.buy.btc + ' BTC</p><p>BTC Buy Rate: ' + valueInfo.buy.rate + ' EUR</p>';
-						document.getElementById('btcValue').onclick = function() {
-								document.getElementById('content').innerHTML = '<h1>Conversion</h1><br><br><form action="./" method="GET">'
-									+ 'Value: <input type="text" name="convert" autofocus></input> BTC <button type="submit" name="action" value="buyBtc">Check</button></form>';		
-						};
-					}
-					request.onerror = function() {
-						document.getElementById('content').innerHTML = 'An error occurred';
-					}
-					request.send();
-				} else if(param.indexOf('buyEur') !== -1) {
-					request.open('GET', 'https://wietzeb.nl/btc/bitonic/?prices&buy=' + value + '&euro');
-					request.onreadystatechange = function() {
-						var valueInfo = JSON.parse(request.responseText)
-						document.getElementById('content').innerHTML = '<h1>Conversion</h1><h2 id="btcValue">' + valueInfo.buy.btc
-							+ ' BTC</h2><p id="eurValue">' + valueInfo.buy.euro + ' EUR</p><p>EUR Buy Rate: ' + valueInfo.buy.rate + ' BTC</p>';
-						document.getElementById('eurValue').onclick = function() {
-								document.getElementById('content').innerHTML = '<h1>Conversion</h1><br><br><form action="./" method="GET">'
-									+ 'Value: <input type="text" name="convert" autofocus></input> EUR <button type="submit" name="action" value="buyEur">Check</button></form>';	
-						};
-					}
-					request.onerror = function() {
-						document.getElementById('content').innerHTML = 'An error occurred';
-					}
-					request.send();
-				} else if(param.indexOf('sellBtc') !== -1) {
-					request.open('GET', 'https://wietzeb.nl/btc/bitonic/?prices&sell=' + value);
-					request.onreadystatechange = function() {
-						var valueInfo = JSON.parse(request.responseText)
-						document.getElementById('content').innerHTML = '<h1>Conversion</h1><h2 id="eurValue">' + valueInfo.sell.euro
-							+ ' EUR</h2><p id="btcValue">' + valueInfo.sell.btc + ' BTC</p><p>BTC Sell Rate: ' + valueInfo.sell.rate + ' EUR</p>';
-						document.getElementById('btcValue').onclick = function() {
-								document.getElementById('content').innerHTML = '<h1>Conversion</h1><br><br><form action="./" method="GET">'
-									+ 'Value: <input type="text" name="convert" autofocus></input> BTC <button type="submit" name="action" value="sellBtc">Check</button></form>';	
-						};
-					}
-					request.onerror = function() {
-						document.getElementById('content').innerHTML = 'An error occurred';
-					}
-					request.send();
-				} else if(param.indexOf('sellEur') !== -1) {
-					request.open('GET', 'https://wietzeb.nl/btc/bitonic/?prices&sell=' + value + '&euro');
-					request.onreadystatechange = function() {
-						var valueInfo = JSON.parse(request.responseText)
-						document.getElementById('content').innerHTML = '<h1>Conversion</h1><h2 id="btcValue">' + valueInfo.sell.btc
-							+ ' BTC</h2><p id="eurValue">' + valueInfo.sell.euro + ' EUR</p><p>EUR Sell Rate: ' + valueInfo.sell.rate + ' BTC</p>';
-						document.getElementById('eurValue').onclick = function() {
-								document.getElementById('content').innerHTML = '<h1>Conversion</h1><br><br><form action="./" method="GET">'
-									+ 'Value: <input type="text" name="convert" autofocus></input> EUR <button type="submit" name="action" value="sellEur">Check</button></form>';	
-						};
-					}
-					request.onerror = function() {
-						document.getElementById('content').innerHTML = 'An error occurred';
-					}
-					request.send();
-				}
-			} else if(param.endsWith('rates')) {
-				var request = new XMLHttpRequest();
-				document.getElementById('content').innerHTML = "<h1>Rates</h1><br><br>Loading..."
-				request.open('GET', 'https://wietzeb.nl/btc/bitonic/?rates');
-				request.onreadystatechange = function() {
-					var rateInfo = JSON.parse(request.responseText);
-					document.getElementById('content').innerHTML = '<h1>Rates</h1><p>For 1 BTC</p><h2>Buy</h2><p>Low: ' + rateInfo.buy.low + ' EUR/BTC</p><p>High: ' + rateInfo.buy.high
-						+ ' EUR/BTC</p><h2>Sell</h2><p>Low: ' + rateInfo.sell.low + ' EUR/BTC</p><p>High: ' + rateInfo.sell.high + ' EUR/BTC</p>';
-				}
-				request.onerror = function() {
-					document.getElementById('content').innerHTML = 'An error occurred';
-				}
-				request.send();
-			} else if(param.endsWith('address')) {
-				document.getElementById('content').innerHTML = '<h1>Address info</h1><form action="./" method="GET">'
-				+ 'Bitcoin Address: <input type="text" name="address" size="36" autofocus></input> <button type="submit">Check</button></form>';
-			} else if(param.endsWith('convert')) {
-				document.getElementById('content').innerHTML =
-				'<h1>Conversion</h1><form action="./" method="GET">Value: <input type="text" name="convert" autofocus> BTC/EUR<br><br>'
-				+ '<button type="submit" name="action" value="buyBtc">Buy BTC</button> <button type="submit" name="action" value="buyEur">Buy EUR</button> '
-				+ '<button type="submit" name="action" value="sellBtc">Sell BTC</button> <button type="submit" name="action" value="sellEur">Sell EUR</button>';
-			} else if(param == '') {
-				document.getElementById('content').innerHTML = '<h1>Home</h1><br><h3><a href="./?address">Bitcoin address info</a></h3><br>'
-				+ '<h3><a href="./?convert">Bitcoin conversion</a></h3><br><h3><a href="./?rates">Bitcoin rates</a></h3>';
-			} else {
-				document.getElementById('content').innerHTML = '<p>Page not found.</p>';
-			}
-			*/
-		</script>
+		<div class="bottom">
+			<a href="https://www.cryptocompare.com">
+				<img class="cc-img" src="./powered-by-cryptocompare.svg" alt="Powered by CryptoCompare">
+			</a>
+		</div>
+		<script src="./js/main.js"></script>
 	</body>
 </html>

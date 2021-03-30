@@ -1,0 +1,7 @@
+# VS Code files
+.vscode/
+*.code-workspace
+
+# Compass files
+.sass-cache/
+config.rb
